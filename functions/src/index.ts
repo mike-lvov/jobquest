@@ -9,8 +9,8 @@ export const parseCVtoJSON = functions.https.onCall(async (data, context) => {
   const client = new vision.ImageAnnotatorClient();
 
   const [textDetection] = await client.textDetection(CVpath);
-  const [annotation] = textDetection.textAnnotations;
+  const annotation = textDetection.textAnnotations;
 
-  const text = annotation ? annotation.description : "";
+  const text = annotation?.[0] ? annotation[0].description : "";
   functions.logger.log(text);
 });
