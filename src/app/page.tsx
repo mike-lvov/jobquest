@@ -19,7 +19,7 @@ export default function Home() {
     <main className={styles.main}>
       <div className={styles.description}>
         <div>
-          <label for="file">Choose file to upload</label>
+          <label>Choose file to upload</label>
           <input type="file" id="file" name="file" onChange={handleFileChange}/>
 
           <div>{file && `${file.name} - ${file.type}`}</div>
