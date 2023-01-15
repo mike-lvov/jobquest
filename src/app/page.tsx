@@ -13,13 +13,14 @@ const inter = Inter({ subsets: ["latin"] });
 export default function Home() {
   const [file, setFile] = useState<File>();
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setFile(e.target.files[0]);
     }
 
     const parseCVtoJSON = httpsCallable(functions, 'parseCVtoJSON');
-    console.log(parseCVtoJSON());
+    const result = await parseCVtoJSON()
+    console.log(result);
   };
 
   // useEffect(() => {

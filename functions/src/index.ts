@@ -11,6 +11,8 @@ export const parseCVtoJSON = functions.https.onCall(async (data, context) => {
   const [textDetection] = await client.textDetection(CVpath);
   const annotation = textDetection.textAnnotations;
 
-  const text = annotation?.[0] ? annotation[0].description : "";
-  functions.logger.log(text);
+  functions.logger.log(annotation);
+  return {
+    annotation
+  }
 });
