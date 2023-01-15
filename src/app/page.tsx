@@ -3,6 +3,10 @@
 import { Inter } from "@next/font/google";
 import styles from "./page.module.css";
 import { ChangeEvent, useEffect, useState } from "react";
+import { firebaseApp } from "../../firebaseApp";
+import { getFunctions, httpsCallable } from "firebase/functions"
+
+const functions = getFunctions(firebaseApp);
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,6 +18,12 @@ export default function Home() {
       setFile(e.target.files[0]);
     }
   };
+
+  useEffect(() => {
+    
+    const helloWorld = httpsCallable(functions, 'helloWorld');
+    helloWorld();
+  }, [])
 
   return (
     <main className={styles.main}>
