@@ -8,11 +8,10 @@ export const parseCVtoJSON = functions.https.onCall(async (data, context) => {
   const CVpath = "gs://jobquest-374812.appspot.com/CV_Anastasiia Baturkina.pdf"
   const client = new vision.ImageAnnotatorClient();
 
-  const [textDetection] = await client.textDetection(CVpath);
-  const annotation = textDetection.textAnnotations;
+  const textDetection = await client.documentTextDetection(CVpath);
 
-  functions.logger.log(annotation);
+  functions.logger.log(textDetection);
   return {
-    annotation
+    textDetection
   }
 });
