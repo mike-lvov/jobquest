@@ -22,7 +22,8 @@ export default function Home() {
   useEffect(() => {
     
     const helloWorld = httpsCallable(functions, 'helloWorld');
-    helloWorld();
+    console.log(helloWorld());
+    // helloWorld();
   }, [])
 
   return (

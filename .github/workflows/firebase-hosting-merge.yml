@@ -12,7 +12,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: npm ci && npm run build
-      - run: npm firebase experiments:enable webframeworks
+      - uses: w9jds/firebase-action@master
+        with:
+          args: experiments:enable webframeworks
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JOBQUEST_374812 }}
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
