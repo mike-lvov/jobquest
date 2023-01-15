@@ -1,10 +1,8 @@
 "use client"; 
 
-import Image from "next/image";
 import { Inter } from "@next/font/google";
 import styles from "./page.module.css";
 import { ChangeEvent, useEffect, useState } from "react";
-import pdf from "pdf-parse"
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,16 +15,6 @@ export default function Home() {
     }
   };
 
-  useEffect(() => {
-    const getText = async () => {
-      if (!file?.arrayBuffer) return;
-      const arraybuffer = await file.arrayBuffer();
-      var buffer = Buffer.from( new Uint8Array(arraybuffer) );
-      const text = await pdf(buffer);
-      console.log({ text })
-    }
-    getText() 
-  }, [file])
   return (
     <main className={styles.main}>
       <div className={styles.description}>
