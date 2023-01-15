@@ -17,13 +17,16 @@ export default function Home() {
     if (e.target.files) {
       setFile(e.target.files[0]);
     }
-  };
 
-  useEffect(() => {
-    
     const parseCVtoJSON = httpsCallable(functions, 'parseCVtoJSON');
     console.log(parseCVtoJSON());
-  }, [])
+  };
+
+  // useEffect(() => {
+    
+  //   const parseCVtoJSON = httpsCallable(functions, 'parseCVtoJSON');
+  //   console.log(parseCVtoJSON());
+  // }, [])
 
   return (
     <main className={styles.main}>
