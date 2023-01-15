@@ -21,9 +21,8 @@ export default function Home() {
 
   useEffect(() => {
     
-    const helloWorld = httpsCallable(functions, 'helloWorld');
-    console.log(helloWorld());
-    // helloWorld();
+    const parseCVtoJSON = httpsCallable(functions, 'parseCVtoJSON');
+    console.log(parseCVtoJSON());
   }, [])
 
   return (
