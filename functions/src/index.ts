@@ -3,12 +3,7 @@ import * as admin from "firebase-admin"
 import vision from "@google-cloud/vision";
 import { v4 as uuidv4 } from 'uuid';
 import { Configuration, OpenAIApi } from "openai";
-
-const configuration = new Configuration({
-  apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
-});
-
-const openai = new OpenAIApi(configuration);
+import {SecretManagerServiceClient}  from '@google-cloud/secret-manager';
 
 
 const functionsConfig = functions.config();
@@ -92,6 +87,23 @@ export const parseCVtoJSON = functions.https.onCall(async (data, context) => {
 });
 
 export const aiComplete = functions.https.onCall(async (data, context) => {
+  const client = new SecretManagerServiceClient();
+
+  const [version] = await client.accessSecretVersion({
+    name: "OPENAI_API_KEY",
+  });
+
+  // Extract the payload as a string.
+  const payload = version.payload?.data?.toString();
+
+  // WARNING: Do not print the secret in a production environment - this
+  // snippet is showing how to access the secret material.
+  console.info(`TOKEN: ${payload}`);
+  const configuration = new Configuration({
+    apiKey: payload,
+  });
+  
+  const openai = new OpenAIApi(configuration);
   const completion = await openai.createCompletion({
     model: "text-davinci-002",
     prompt: "Hello world",
