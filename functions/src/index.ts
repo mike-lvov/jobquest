@@ -9,6 +9,10 @@ admin.initializeApp({
   projectId: functionsConfig.service_account.project_id,
   credential: admin.credential.cert({
     ...functionsConfig.service_account,
+    private_key: functionsConfig.service_account.private_key.replace(
+      /\\n/g,
+      "\n"
+    )
   }),
 });
 

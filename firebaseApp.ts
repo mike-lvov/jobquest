@@ -13,5 +13,5 @@ const clientCredentials = {
 
 export const firebaseApp = initializeApp(clientCredentials);
 
-const functions = getFunctions(getApp());
-connectFunctionsEmulator(functions, "localhost", 5001);
+// const functions = getFunctions(getApp());
+// connectFunctionsEmulator(functions, "localhost", 5001);
