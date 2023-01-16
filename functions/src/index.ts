@@ -93,7 +93,7 @@ export const parseCVtoJSON = functions.runWith({ secrets: ["OPENAI_API_KEY"] }).
     top_p: 1,
     frequency_penalty: 0,
     presence_penalty: 0,
-    prompt:`Extract valuable information about achievements and skills into a valid JSON array of strings.
+    prompt:`Extract valuable information about achievements and skills into a valid JSON array of strings. Start with [
     The text:
     
     ${responseString}`

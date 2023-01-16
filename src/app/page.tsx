@@ -39,7 +39,8 @@ export default function Home() {
       });
       console.log({ response });
 
-      const tokizedData = response.data as { finalAItokens: string[] }).finalAItokens;
+      const tokizedData = (response.data as { finalAItokens: string[] }).finalAItokens;
+      // @ts-ignore
       let uniqueTokenizedData = [...new Set(tokizedData)];
       setExpTokens(uniqueTokenizedData)
     });
