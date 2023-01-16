@@ -3,7 +3,7 @@ import * as admin from "firebase-admin"
 import vision from "@google-cloud/vision";
 import { v4 as uuidv4 } from 'uuid';
 import { Configuration, OpenAIApi } from "openai";
-import {SecretManagerServiceClient}  from '@google-cloud/secret-manager';
+// import {SecretManagerServiceClient}  from '@google-cloud/secret-manager';
 
 
 const functionsConfig = functions.config();
@@ -20,7 +20,7 @@ admin.initializeApp({
   }),
 });
 
-export const parseCVtoJSON = functions.https.onCall(async (data, context) => {
+export const parseCVtoJSON = functions.runWith({ secrets: ["OPENAI_API_KEY"] }).https.onCall(async (data, context) => {
   
   const client = new vision.v1.ImageAnnotatorClient();
 
@@ -54,9 +54,7 @@ export const parseCVtoJSON = functions.https.onCall(async (data, context) => {
 
   // @ts-ignore
   const [operation] = await client.asyncBatchAnnotateFiles(request);
-  const [filesResponse] = await operation.promise();
-  const destinationUri =
-    filesResponse.responses[0].outputConfig.gcsDestination.uri;
+  await operation.promise();
 
   const storage = admin.app().storage()
   const [files] = await storage.bucket("gs://jobquest-374812.appspot.com").getFiles({ prefix: `results/${newJSONFileNamePrefix}` })
@@ -68,54 +66,97 @@ export const parseCVtoJSON = functions.https.onCall(async (data, context) => {
     const finalString = dataObject.responses.reduce((accumulator: any, currentValue: any) => accumulator + currentValue.fullTextAnnotation.text, "");
     responseString += finalString
   }
-  // const [files] = await bucket.getFiles({ prefix: 'userData/some-file-'});
-  //  files.forEach(async (file: any) => {
-  //     const fileObject = await file.download();
-  //     const dataObject = JSON.parse(fileObject.toString());
-  //     const finalString = dataObject.responses.reduce((accumulator: any, currentValue: any) => accumulator + currentValue.fullTextAnnotation.text, "");
-  //  });
 
 
-  // const fileObject = await filePath.download();
-  // const dataObject = JSON.parse(fileObject.toString());
-  // const finalString = dataObject.responses.reduce((accumulator: any, currentValue: any) => accumulator + currentValue.fullTextAnnotation.text, "");
-  // console.log(finalString);
-  return {
-    destinationUri,
-    responseString
-  }
-});
+  const getCircularReplacer = () => {
+    const seen = new WeakSet();
+    return (key: any, value: any) => {
+      if (typeof value === "object" && value !== null) {
+        if (seen.has(value)) {
+          return;
+        }
+        seen.add(value);
+      }
+      return value;
+    };
+  };
 
-export const aiComplete = functions.https.onCall(async (data, context) => {
-  const client = new SecretManagerServiceClient();
-
-  const [version] = await client.accessSecretVersion({
-    name: "OPENAI_API_KEY",
-  });
-
-  // Extract the payload as a string.
-  const payload = version.payload?.data?.toString();
-
-  // WARNING: Do not print the secret in a production environment - this
-  // snippet is showing how to access the secret material.
-  console.info(`TOKEN: ${payload}`);
   const configuration = new Configuration({
-    apiKey: payload,
+    apiKey: process.env.OPENAI_API_KEY,
   });
   
   const openai = new OpenAIApi(configuration);
   const completion = await openai.createCompletion({
-    model: "text-davinci-002",
-    prompt: "Hello world",
+    model: "text-davinci-003",
+    temperature: 0.5,
+    max_tokens: 1000,
+    top_p: 1,
+    frequency_penalty: 0.5,
+    presence_penalty: 0,
+    prompt:`Extract valuable information about achievements and skills into a JSON array of strings.
+    The answer must only contain data from the CV and no opinions and it must be parsable by JSON.parse
+    
+    ${responseString}`
   });
 
-  console.log(completion.data.choices[0].text);
+  const stringifiedResponse = JSON.stringify(completion, getCircularReplacer());
+  const parsedResponse = JSON.parse(stringifiedResponse);
+
+  console.log(parsedResponse.data.choices[0].text);
+  const finalAItokens = JSON.parse(parsedResponse.data.choices[0].text)
   
   return {
-    data: completion.data.choices[0].text,
-    fullData: completion
+    finalAItokens
   }
-})
+});
+
+// export const aiComplete = functions
+//   .runWith({ secrets: ["OPENAI_API_KEY"] })
+//   .https
+//   .onCall(async (data, context) => {
+
+//     const getCircularReplacer = () => {
+//       const seen = new WeakSet();
+//       return (key: any, value: any) => {
+//         if (typeof value === "object" && value !== null) {
+//           if (seen.has(value)) {
+//             return;
+//           }
+//           seen.add(value);
+//         }
+//         return value;
+//       };
+//     };
+
+//     const configuration = new Configuration({
+//       apiKey: process.env.OPENAI_API_KEY,
+//     });
+    
+//     const openai = new OpenAIApi(configuration);
+//     const completion = await openai.createCompletion({
+//       model: "text-davinci-003",
+//       temperature: 0.5,
+//       max_tokens: 1000,
+//       top_p: 1,
+//       frequency_penalty: 0.5,
+//       presence_penalty: 0,
+//       prompt:''
+//     });
+
+//     const stringifiedResponse = JSON.stringify(completion, getCircularReplacer());
+//     const parsedResponse = JSON.parse(stringifiedResponse);
+
+//     console.log(parsedResponse);
+
+//     // console.log(completion.data.choices[0].text);
+    
+//     return {
+//       parsedResponse,
+//       text: parsedResponse.data.choices[0].text
+//       // data: completion.data.choices[0].text,
+//       // fullData: completion
+//     }
+// })
 
 
 

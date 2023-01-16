@@ -15,6 +15,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const [file, setFile] = useState<File>();
+  const [expTokens, setExpTokens] = useState<string[]>([])
 
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -37,15 +38,16 @@ export default function Home() {
         cvFilePath: `gs://${snapshot.metadata.bucket}/${snapshot.metadata.fullPath}`
       });
       console.log({ response });
+      setExpTokens((response.data as { finalAiTokens: string[] }).finalAiTokens)
     });
     
   }, [file])
 
-  const callAi = async () => {
-    const callAiCallable = httpsCallable(functions, 'aiComplete');
-    const result = await callAiCallable();
-    console.log({ result })
-  }
+  // const callAi = async () => {
+  //   const callAiCallable = httpsCallable(functions, 'aiComplete');
+  //   const result = await callAiCallable();
+  //   console.log({ result })
+  // }
 
   return (
     <main className={styles.main}>
@@ -55,7 +57,8 @@ export default function Home() {
           <input type="file" id="file" name="file" onChange={handleFileChange}/>
 
           <div>{file && `${file.name} - ${file.type}`}</div>
-          <button onClick={callAi}>Call AI</button>
+          <div>{expTokens.map(token => <p key={token}>{token}</p>)}</div>
+          {/* <button onClick={callAi}>Call AI</button> */}
         </div>
       </div>
     </main>

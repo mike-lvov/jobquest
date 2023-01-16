@@ -1,0 +1,64 @@
+[debug] [2023-01-16T21:16:35.060Z] ----------------------------------------------------------------------
+[debug] [2023-01-16T21:16:35.062Z] Command:       /usr/local/bin/node /usr/local/bin/firebase deploy --only functions:parseCVtoJSON
+[debug] [2023-01-16T21:16:35.062Z] CLI Version:   11.20.0
+[debug] [2023-01-16T21:16:35.062Z] Platform:      darwin
+[debug] [2023-01-16T21:16:35.062Z] Node Version:  v16.16.0
+[debug] [2023-01-16T21:16:35.071Z] Time:          Mon Jan 16 2023 23:16:35 GMT+0200 (Eastern European Standard Time)
+[debug] [2023-01-16T21:16:35.072Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-01-16T21:16:35.141Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-01-16T21:16:35.142Z] > authorizing via signed-in user (mike.lvov.soft@gmail.com)
+[debug] [2023-01-16T21:16:35.142Z] [iam] checking project jobquest-374812 for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]
+[debug] [2023-01-16T21:16:35.145Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/jobquest-374812:testIamPermissions [none]
+[debug] [2023-01-16T21:16:35.145Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/jobquest-374812:testIamPermissions x-goog-quota-user=projects/jobquest-374812
+[debug] [2023-01-16T21:16:35.145Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/jobquest-374812:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2023-01-16T21:17:50.270Z] [iam] error while checking permissions, command may fail: FirebaseError: Failed to make request to https://cloudresourcemanager.googleapis.com/v1/projects/jobquest-374812:testIamPermissions
+[debug] [2023-01-16T21:17:50.271Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/jobquest-374812/serviceAccounts/jobquest-374812@appspot.gserviceaccount.com:testIamPermissions [none]
+[debug] [2023-01-16T21:17:50.271Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/jobquest-374812/serviceAccounts/jobquest-374812@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2023-01-16T21:19:05.373Z] [functions] service account IAM check errored, deploy may fail:Failed to make request to https://iam.googleapis.com/v1/projects/jobquest-374812/serviceAccounts/jobquest-374812@appspot.gserviceaccount.com:testIamPermissions {"name":"FirebaseError","children":[],"exit":1,"message":"Failed to make request to https://iam.googleapis.com/v1/projects/jobquest-374812/serviceAccounts/jobquest-374812@appspot.gserviceaccount.com:testIamPermissions","original":{"message":"request to https://iam.googleapis.com/v1/projects/jobquest-374812/serviceAccounts/jobquest-374812@appspot.gserviceaccount.com:testIamPermissions failed, reason: connect ETIMEDOUT 172.217.16.42:443","type":"system","errno":"ETIMEDOUT","code":"ETIMEDOUT"},"status":500}
+[info] 
+[info] === Deploying to 'jobquest-374812'...
+[info] 
+[info] i  deploying functions 
+[info] Running command: npm --prefix "$RESOURCE_DIR" run build
+[info] ✔  functions: Finished running predeploy script. 
+[debug] [2023-01-16T21:19:16.049Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/jobquest-374812 [none]
+[debug] [2023-01-16T21:19:46.051Z] Timeout reached making request to https://firebase.googleapis.com/v1beta1/projects/jobquest-374812
+[debug] [2023-01-16T21:19:51.064Z] Error: Timed out.
+    at Timeout._onTimeout (/usr/local/lib/node_modules/firebase-tools/lib/utils.js:253:49)
+    at listOnTimeout (node:internal/timers:559:17)
+    at processTimers (node:internal/timers:502:7)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2023-01-16T21:20:04.293Z] ----------------------------------------------------------------------
+[debug] [2023-01-16T21:20:04.295Z] Command:       /usr/local/bin/node /usr/local/bin/firebase deploy --only functions:parseCVtoJSON
+[debug] [2023-01-16T21:20:04.295Z] CLI Version:   11.20.0
+[debug] [2023-01-16T21:20:04.295Z] Platform:      darwin
+[debug] [2023-01-16T21:20:04.296Z] Node Version:  v16.16.0
+[debug] [2023-01-16T21:20:04.296Z] Time:          Mon Jan 16 2023 23:20:04 GMT+0200 (Eastern European Standard Time)
+[debug] [2023-01-16T21:20:04.297Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-01-16T21:20:04.369Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-01-16T21:20:04.369Z] > authorizing via signed-in user (mike.lvov.soft@gmail.com)
+[debug] [2023-01-16T21:20:04.369Z] [iam] checking project jobquest-374812 for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]
+[debug] [2023-01-16T21:20:04.371Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/jobquest-374812:testIamPermissions [none]
+[debug] [2023-01-16T21:20:04.371Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/jobquest-374812:testIamPermissions x-goog-quota-user=projects/jobquest-374812
+[debug] [2023-01-16T21:20:04.371Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/jobquest-374812:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2023-01-16T21:21:19.396Z] [iam] error while checking permissions, command may fail: FirebaseError: Failed to make request to https://cloudresourcemanager.googleapis.com/v1/projects/jobquest-374812:testIamPermissions
+[debug] [2023-01-16T21:21:19.398Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/jobquest-374812/serviceAccounts/jobquest-374812@appspot.gserviceaccount.com:testIamPermissions [none]
+[debug] [2023-01-16T21:21:19.398Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/jobquest-374812/serviceAccounts/jobquest-374812@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2023-01-16T21:22:34.402Z] [functions] service account IAM check errored, deploy may fail:Failed to make request to https://iam.googleapis.com/v1/projects/jobquest-374812/serviceAccounts/jobquest-374812@appspot.gserviceaccount.com:testIamPermissions {"name":"FirebaseError","children":[],"exit":1,"message":"Failed to make request to https://iam.googleapis.com/v1/projects/jobquest-374812/serviceAccounts/jobquest-374812@appspot.gserviceaccount.com:testIamPermissions","original":{"message":"request to https://iam.googleapis.com/v1/projects/jobquest-374812/serviceAccounts/jobquest-374812@appspot.gserviceaccount.com:testIamPermissions failed, reason: connect ETIMEDOUT 172.217.16.42:443","type":"system","errno":"ETIMEDOUT","code":"ETIMEDOUT"},"status":500}
+[info] 
+[info] === Deploying to 'jobquest-374812'...
+[info] 
+[info] i  deploying functions 
+[info] Running command: npm --prefix "$RESOURCE_DIR" run build
+[info] ✔  functions: Finished running predeploy script. 
+[debug] [2023-01-16T21:22:46.018Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/jobquest-374812 [none]
+[debug] [2023-01-16T21:23:16.019Z] Timeout reached making request to https://firebase.googleapis.com/v1beta1/projects/jobquest-374812
+[debug] [2023-01-16T21:23:21.028Z] Error: Timed out.
+    at Timeout._onTimeout (/usr/local/lib/node_modules/firebase-tools/lib/utils.js:253:49)
+    at listOnTimeout (node:internal/timers:559:17)
+    at processTimers (node:internal/timers:502:7)
+[error] 
+[error] Error: An unexpected error has occurred.

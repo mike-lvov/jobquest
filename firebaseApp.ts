@@ -13,13 +13,9 @@ const clientCredentials = {
 
 export const firebaseApp = initializeApp(clientCredentials);
 
-console.log(
-  process.env.NEXT_PUBLIC_EMULATOR,
-  process.env.NEXT_PUBLIC_FIREBASE_EMULATOR_HOST,
-  process.env.NEXT_PUBLIC_FIREBASE_FUNCTIONS_EMULATOR_PORT
-)
+console.log("ENV:", process.env.NODE_ENV);
 
-if (process.env.NEXT_PUBLIC_EMULATOR ==='true') {
+if (process.env.NODE_ENV ==='development') {
   const functions = getFunctions(getApp());
   if (
     process.env.NEXT_PUBLIC_FIREBASE_EMULATOR_HOST && 
