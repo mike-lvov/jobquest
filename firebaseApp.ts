@@ -1,4 +1,5 @@
-import { initializeApp } from 'firebase/app';
+import { initializeApp, getApp } from 'firebase/app';
+import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
 
 const clientCredentials = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -9,4 +10,8 @@ const clientCredentials = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
+
 export const firebaseApp = initializeApp(clientCredentials);
+
+const functions = getFunctions(getApp());
+connectFunctionsEmulator(functions, "localhost", 5001);

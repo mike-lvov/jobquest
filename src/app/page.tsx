@@ -5,8 +5,11 @@ import styles from "./page.module.css";
 import { ChangeEvent, useEffect, useState } from "react";
 import { firebaseApp } from "../../firebaseApp";
 import { getFunctions, httpsCallable } from "firebase/functions"
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 
 const functions = getFunctions(firebaseApp);
+const storage = getStorage(firebaseApp);
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,16 +21,23 @@ export default function Home() {
       setFile(e.target.files[0]);
     }
 
-    const parseCVtoJSON = httpsCallable(functions, 'parseCVtoJSON');
-    const result = await parseCVtoJSON()
-    console.log(result);
+    
   };
 
-  // useEffect(() => {
+  useEffect(() => {
+
+    if (!file) return;
+    const parseCVtoJSON = httpsCallable(functions, 'parseCVtoJSON');
+
+    const storageRef = ref(storage, `CVs/${file.name}`);
     
-  //   const parseCVtoJSON = httpsCallable(functions, 'parseCVtoJSON');
-  //   console.log(parseCVtoJSON());
-  // }, [])
+    uploadBytes(storageRef, file).then(async (snapshot) => {
+      console.log('Uploaded a blob or file!');
+      const response = await parseCVtoJSON({ cvFilePath: `gs://${snapshot.metadata.bucket}/${snapshot.metadata.fullPath}` });
+      console.log({ response });
+    });
+    
+  }, [file])
 
   return (
     <main className={styles.main}>

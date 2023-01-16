@@ -1,14 +1,22 @@
 import * as functions from "firebase-functions";
+import * as admin from "firebase-admin"
 import vision from "@google-cloud/vision";
 
-// // Start writing functions
-// // https://firebase.google.com/docs/functions/typescript
-//
+const functionsConfig = functions.config();
+
+admin.initializeApp({
+  ...functionsConfig,
+  projectId: functionsConfig.service_account.project_id,
+  credential: admin.credential.cert({
+    ...functionsConfig.service_account,
+  }),
+});
+
 export const parseCVtoJSON = functions.https.onCall(async (data, context) => {
-  // const CVpath = "gs://jobquest-374812.appspot.com/CV_Anastasiia Baturkina.pdf"
+  
   const client = new vision.v1.ImageAnnotatorClient();
 
-  const gcsSourceUri =  "gs://jobquest-374812.appspot.com/CV_Anastasiia Baturkina.pdf";
+  const gcsSourceUri =  data.cvFilePath
 const gcsDestinationUri = "gs://jobquest-374812.appspot.com/results/";
 
 const inputConfig = {
@@ -37,13 +45,16 @@ const request = {
 // @ts-ignore
 const [operation] = await client.asyncBatchAnnotateFiles(request);
 const [filesResponse] = await operation.promise();
-const destinationUri =
-  filesResponse.responses[0].outputConfig.gcsDestination.uri;
+// const destinationUri =
+//   filesResponse.responses[0].outputConfig.gcsDestination.uri;
 
-  // const textDetection = await client.documentTextDetection(CVpath);
-
-  functions.logger.log(destinationUri);
+  // const storage = admin.app().storage()
+  // const filePath = storage.bucket("gs://jobquest-374812.appspot.com").file("results/output-1-to-2.json");
+  // const fileObject = await filePath.download();
+  // const dataObject = JSON.parse(fileObject.toString());
+  // const finalString = dataObject.responses.reduce((accumulator: any, currentValue: any) => accumulator + currentValue.fullTextAnnotation.text, "");
+  // console.log(finalString);
   return {
-    destinationUri
+    config: filesResponse.responses[0].outputConfig
   }
 });

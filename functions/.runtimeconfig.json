@@ -1,0 +1,20 @@
+{
+  "apiKey": "AIzaSyDgezCxO3DcbQcK6jJLI9GQLbJ2xA_k_wQ",
+  "authDomain": "jobquest-374812.firebaseapp.com",
+  "projectId": "jobquest-374812",
+  "storageBucket": "jobquest-374812.appspot.com",
+  "messagingSenderId": "383008537279",
+  "appId": "1:383008537279:web:477399e29f6f7c64b8e40a",
+  "service_account": {
+    "type": "service_account",
+    "project_id": "jobquest-374812",
+    "private_key_id": "e3ba74163242542cfcda66d90aa13c94a33910cf",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCXcs4GmxND7Fqw\nLBjpjINw802S8LWyHHDQq8pMX5daas3PmICeOeOHL/tIexJaFAc1wt8HAcoFUbYO\nZUsI9sg6C/fM1wk9Y4H2yF93LD/ybphgTvZx472sH8PzJAH981gOQTNCPDTb4qi+\niEcleL+JG11HmvZxegSObX5vk8yF0/18BocEX1zB2PmiBmgqhj6lfP29uBn0z2Pv\n4ejTkeFElOitO/RtYwt3XKyoqDFUICE7NHbDuXR5X+nMFPglF5A5Z4095A42FN48\nZkDLl1nEhV1TyLPdfBQNyguKyU2qwfQRqc3pnOviB51GyENcxUf7FKqXKhNiKnhf\n1CWq0F/ZAgMBAAECggEAIpsCBrJimY+lPUImQx9vXVzK6fuEmPk0sgm/BOqGzAtB\nkeD36q+xlM9a7LnqfJi8+QTZL2GyRrrgDbQJjDfPkqvvaGfuXY+iP8CTR8jdp8ir\nmr4QQ//U9EKh5KnipqN3CHLPgp/9OA03n6nGEALiSTLugpEfJNjLt7u/O0GbZyyq\nT+LQoEHUs0aNbz/2p0s1yGFsPo/LBZjPSn5Pk0rFNzyM/YcqvFYF4JmfnY5Ty/BI\nJYVcyx+d12T0ekHKcde/AdTwICaEo/+PV28YVQqGC6SNjEKgrIYYMkxGJu4uY148\ndEBfRahxZUc8A8S8+f9NOKvYa4/TVdJ9upoBgBcBXQKBgQDPlw8hMJvwvKb2QXQ0\nnbuHq2TUcQyam179sI71TX0ZV4WIgOurEhWEdVzH6Y0b4H4z061sj4Y5rwyZiWTP\nxrjyuEccFI4JkxZ846SuIkprYK1jW+0uMQYmm3MSiA6ocx7fpVTeAc3X6VBEzwqF\ny3pKzc2MlYBo6xtn0GBia1XtGwKBgQC6xCQ6x8WYARr072lUGEGpW+0sZNviRbsx\nUMj1PXR88k/wsbi3Y7whIIpCEN93igady63orAe5GzTEQ75RTPsFe//GH3YKeXLy\nQzESTv0/y1g4l0ixZoc/7I/kUnAoBST0aaab3X0A1GmTHwWCpSK55Ap/CBp6hOit\nOAPWxNz6GwKBgH1pbGmHvV4GCvRQ/Mxg0o+XGzZBCfVJkmy/Qs6tvrsVpgWepUHX\njgpVAPWBgo9p47SZ2HbyiovE1l7Xo4DnNIrmi4dKX7knFHnk6XOOIdmXMYkKW1MB\nqQ6f8Tgr3Hcl/WvtrUTmYB5lxOmdD2VfVYVlqh2ZoFdCWm8wc1piMCorAoGAUjDJ\nJNkPeuJZo5rMhoaaNtbOnC/SmFRJmd1MYqhl4CqexXTgrkwE2atBTOux/CBQ4xZk\ndTVnvK1dXlXVpl+zRGmaWO01fEyQKk8phD4gsvdg3p6tDezp7lbDyB4DX4lMBweL\nm6IwRbI0t9r6CNF1Y8sYV2kQhgSBhOFWxygheysCgYEAri+T2hvFAFfIPQjSnuqD\nZ3wZd03dSrD5OovZmEPPBQuoSHUEF5KW3r2Yg5DEAJU8xmvUpFtwIMBAeNGEMayK\noVYWo/EWFTDBo9im8QpnLwQ2r1Z4bt0aizLgnKGje6/xIhebZdLZYAayrJVZjis1\nIQ+WvsSx1j7Z7M9/Es276a8=\n-----END PRIVATE KEY-----\n",
+    "client_email": "firebase-adminsdk-3sblz@jobquest-374812.iam.gserviceaccount.com",
+    "client_id": "109305518184268667004",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-3sblz%40jobquest-374812.iam.gserviceaccount.com"
+  }
+}
