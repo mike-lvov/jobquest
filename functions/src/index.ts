@@ -2,6 +2,14 @@ import * as functions from "firebase-functions";
 import * as admin from "firebase-admin"
 import vision from "@google-cloud/vision";
 import { v4 as uuidv4 } from 'uuid';
+import { Configuration, OpenAIApi } from "openai";
+
+const configuration = new Configuration({
+  apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+});
+
+const openai = new OpenAIApi(configuration);
+
 
 const functionsConfig = functions.config();
 
@@ -82,3 +90,21 @@ export const parseCVtoJSON = functions.https.onCall(async (data, context) => {
     responseString
   }
 });
+
+export const aiComplete = functions.https.onCall(async (data, context) => {
+  const completion = await openai.createCompletion({
+    model: "text-davinci-002",
+    prompt: "Hello world",
+  });
+
+  console.log(completion.data.choices[0].text);
+  
+  return {
+    data: completion.data.choices[0].text,
+    fullData: completion
+  }
+})
+
+
+
+

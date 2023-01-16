@@ -25,8 +25,8 @@ export default function Home() {
   };
 
   useEffect(() => {
-
     if (!file) return;
+
     const parseCVtoJSON = httpsCallable(functions, 'parseCVtoJSON');
 
     const storageRef = ref(storage, `CVs/${file.name}`);
@@ -41,6 +41,12 @@ export default function Home() {
     
   }, [file])
 
+  const callAi = async () => {
+    const callAiCallable = httpsCallable(functions, 'aiComplete');
+    const result = await callAiCallable();
+    console.log({ result })
+  }
+
   return (
     <main className={styles.main}>
       <div className={styles.description}>
@@ -49,6 +55,7 @@ export default function Home() {
           <input type="file" id="file" name="file" onChange={handleFileChange}/>
 
           <div>{file && `${file.name} - ${file.type}`}</div>
+          <button onClick={callAi}>Call AI</button>
         </div>
       </div>
     </main>

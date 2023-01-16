@@ -13,5 +13,23 @@ const clientCredentials = {
 
 export const firebaseApp = initializeApp(clientCredentials);
 
-// const functions = getFunctions(getApp());
-// connectFunctionsEmulator(functions, "localhost", 5001);
+console.log(
+  process.env.NEXT_PUBLIC_EMULATOR,
+  process.env.NEXT_PUBLIC_FIREBASE_EMULATOR_HOST,
+  process.env.NEXT_PUBLIC_FIREBASE_FUNCTIONS_EMULATOR_PORT
+)
+
+if (process.env.NEXT_PUBLIC_EMULATOR ==='true') {
+  const functions = getFunctions(getApp());
+  if (
+    process.env.NEXT_PUBLIC_FIREBASE_EMULATOR_HOST && 
+    process.env.NEXT_PUBLIC_FIREBASE_FUNCTIONS_EMULATOR_PORT) {
+      console.log("Launcehd functions simulator");
+      connectFunctionsEmulator(
+        functions, 
+        process.env.NEXT_PUBLIC_FIREBASE_EMULATOR_HOST,
+        Number(process.env.NEXT_PUBLIC_FIREBASE_FUNCTIONS_EMULATOR_PORT)
+      );
+  }
+  
+}
