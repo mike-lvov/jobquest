@@ -33,7 +33,9 @@ export default function Home() {
     
     uploadBytes(storageRef, file).then(async (snapshot) => {
       console.log('Uploaded a blob or file!');
-      const response = await parseCVtoJSON({ cvFilePath: `gs://${snapshot.metadata.bucket}/${snapshot.metadata.fullPath}` });
+      const response = await parseCVtoJSON({ 
+        cvFilePath: `gs://${snapshot.metadata.bucket}/${snapshot.metadata.fullPath}`
+      });
       console.log({ response });
     });
     
