@@ -38,7 +38,10 @@ export default function Home() {
         cvFilePath: `gs://${snapshot.metadata.bucket}/${snapshot.metadata.fullPath}`
       });
       console.log({ response });
-      setExpTokens((response.data as { finalAiTokens: string[] }).finalAiTokens)
+
+      const tokizedData = response.data as { finalAItokens: string[] }).finalAItokens;
+      let uniqueTokenizedData = [...new Set(tokizedData)];
+      setExpTokens(uniqueTokenizedData)
     });
     
   }, [file])

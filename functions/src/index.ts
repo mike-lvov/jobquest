@@ -91,10 +91,10 @@ export const parseCVtoJSON = functions.runWith({ secrets: ["OPENAI_API_KEY"] }).
     temperature: 0.5,
     max_tokens: 1000,
     top_p: 1,
-    frequency_penalty: 0.5,
+    frequency_penalty: 0,
     presence_penalty: 0,
-    prompt:`Extract valuable information about achievements and skills into a JSON array of strings.
-    The answer must only contain data from the CV and no opinions and it must be parsable by JSON.parse
+    prompt:`Extract valuable information about achievements and skills into a valid JSON array of strings.
+    The text:
     
     ${responseString}`
   });
