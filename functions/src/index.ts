@@ -20,6 +20,25 @@ admin.initializeApp({
   }),
 });
 
+const parseString = (string: string) => {
+  return string.split("\n")
+    .filter((line) => line !== "")
+    .map((line) => line.trim().replace(/^-\s*/, ""))
+}
+
+const getCircularReplacer = () => {
+  const seen = new WeakSet();
+  return (key: any, value: any) => {
+    if (typeof value === "object" && value !== null) {
+      if (seen.has(value)) {
+        return;
+      }
+      seen.add(value);
+    }
+    return value;
+  };
+};
+
 export const parseCVtoJSON = functions.runWith({ secrets: ["OPENAI_API_KEY"] }).https.onCall(async (data, context) => {
   
   const client = new vision.v1.ImageAnnotatorClient();
@@ -67,19 +86,7 @@ export const parseCVtoJSON = functions.runWith({ secrets: ["OPENAI_API_KEY"] }).
     responseString += finalString
   }
 
-
-  const getCircularReplacer = () => {
-    const seen = new WeakSet();
-    return (key: any, value: any) => {
-      if (typeof value === "object" && value !== null) {
-        if (seen.has(value)) {
-          return;
-        }
-        seen.add(value);
-      }
-      return value;
-    };
-  };
+  console.log("OCR response:", responseString);
 
   const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
@@ -88,76 +95,72 @@ export const parseCVtoJSON = functions.runWith({ secrets: ["OPENAI_API_KEY"] }).
   const openai = new OpenAIApi(configuration);
   const completion = await openai.createCompletion({
     model: "text-davinci-003",
-    temperature: 0.5,
-    max_tokens: 1000,
+    temperature: 0.7,
+    max_tokens: 2000,
     top_p: 1,
     frequency_penalty: 0,
     presence_penalty: 0,
-    prompt:`Extract valuable information about achievements and skills into a valid JSON array of strings. Start with [
+    prompt:`Extract every valuable piece of information about the person, his/her achievements into a bulleted list.
+    Don't include dates, durations, company names, company links or job titles.
+    Don't include language proficiency if it's not relevant for the cover letter.
+      
     The text:
+    ${responseString}
     
-    ${responseString}`
+  
+    list:
+- `
   });
 
   const stringifiedResponse = JSON.stringify(completion, getCircularReplacer());
   const parsedResponse = JSON.parse(stringifiedResponse);
 
-  console.log(parsedResponse.data.choices[0].text);
-  const finalAItokens = JSON.parse(parsedResponse.data.choices[0].text)
+  const aiTextResponse = parsedResponse.data.choices[0].text;
+  console.log(aiTextResponse);
+  const finalAItokens = parseString(aiTextResponse)
   
   return {
     finalAItokens
   }
 });
 
-// export const aiComplete = functions
-//   .runWith({ secrets: ["OPENAI_API_KEY"] })
-//   .https
-//   .onCall(async (data, context) => {
 
-//     const getCircularReplacer = () => {
-//       const seen = new WeakSet();
-//       return (key: any, value: any) => {
-//         if (typeof value === "object" && value !== null) {
-//           if (seen.has(value)) {
-//             return;
-//           }
-//           seen.add(value);
-//         }
-//         return value;
-//       };
-//     };
+export const generateCoverLetter = functions.runWith({ secrets: ["OPENAI_API_KEY"] }).https.onCall(async (data, context) => {
+  const {
+    expTokens, jobDescription
+  } = data;
 
-//     const configuration = new Configuration({
-//       apiKey: process.env.OPENAI_API_KEY,
-//     });
+  const configuration = new Configuration({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+  
+  const openai = new OpenAIApi(configuration);
+  const completion = await openai.createCompletion({
+    model: "text-davinci-003",
+    temperature: 0.9,
+    max_tokens: 800,
+    top_p: 1,
+    frequency_penalty: 0,
+    presence_penalty: 0.6,
+    best_of: 2,
+    stop: [" Human:", " AI:"],
+    prompt:`The following is a conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly.
+    Human: I'll provide you with a list of a person's achievements, experience, and skills. You should create the cover letter based on the vacancy information that I will also provice.
+    Start generating right away
     
-//     const openai = new OpenAIApi(configuration);
-//     const completion = await openai.createCompletion({
-//       model: "text-davinci-003",
-//       temperature: 0.5,
-//       max_tokens: 1000,
-//       top_p: 1,
-//       frequency_penalty: 0.5,
-//       presence_penalty: 0,
-//       prompt:''
-//     });
-
-//     const stringifiedResponse = JSON.stringify(completion, getCircularReplacer());
-//     const parsedResponse = JSON.parse(stringifiedResponse);
-
-//     console.log(parsedResponse);
-
-//     // console.log(completion.data.choices[0].text);
+    List of information about the person: ${expTokens}
     
-//     return {
-//       parsedResponse,
-//       text: parsedResponse.data.choices[0].text
-//       // data: completion.data.choices[0].text,
-//       // fullData: completion
-//     }
-// })
+    Vacancy: ${jobDescription}`
+  });
 
+  const stringifiedResponse = JSON.stringify(completion, getCircularReplacer());
+  const parsedResponse = JSON.parse(stringifiedResponse);
 
+  const generatedCoverLetter = parsedResponse.data.choices[0].text;
+  console.log({ generatedCoverLetter });
 
-
+  return {
+    generatedCoverLetter,
+    parsedResponse
+  }
+})

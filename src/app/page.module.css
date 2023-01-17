@@ -1,19 +1,52 @@
 .main {
-  display: flex;
+  display: block;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: 6rem;
   min-height: 100vh;
+  display: flex;
+
+}
+
+.pageTitle {
+  margin-top: 2rem;
+  font-size: 35px;
+  text-align: center;
+}
+
+.stepsCount {
+  text-align: center;
+}
+
+.nextStepButton {
+  font-size: 30px;
+  margin-top: 10px;
+  padding: 5px;
+  cursor: pointer;
+  margin: 10px;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loaderContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .description {
-  display: inherit;
-  justify-content: inherit;
-  align-items: inherit;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
   font-size: 0.85rem;
-  max-width: var(--max-width);
   width: 100%;
+  height: 100%;
   z-index: 2;
   font-family: var(--font-mono);
 }
@@ -28,7 +61,8 @@
 .description p {
   position: relative;
   margin: 0;
-  padding: 1rem;
+  padding: 3px;
+  font-size: 10px;
   background-color: rgba(var(--callout-rgb), 0.5);
   border: 1px solid rgba(var(--callout-border-rgb), 0.3);
   border-radius: var(--border-radius);
