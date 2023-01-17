@@ -4,18 +4,21 @@ import { Inter } from "@next/font/google";
 import styles from "./page.module.css";
 import { ChangeEvent, Component, useEffect, useState } from "react";
 import { firebaseApp } from "../../firebaseApp";
+import { CountDownTimer } from "../components/countDownTimer";
 import { getFunctions, httpsCallable } from "firebase/functions"
 import { getStorage, ref, uploadBytes } from "firebase/storage";
-import { ColorRing } from  'react-loader-spinner'
+import { getAnalytics, logEvent } from "firebase/analytics";
+// import { ColorRing } from  'react-loader-spinner'
 
 const functions = getFunctions(firebaseApp);
 const storage = getStorage(firebaseApp);
+const analytics = getAnalytics(firebaseApp);
 
 
 const inter = Inter({ subsets: ["latin"] });
 
-const Loader = ({ component }: {component?: JSX.Element}) => <div className={styles.loaderContainer}>
-  <ColorRing
+const Loader = ({ component, duration = 60 }: {component?: JSX.Element, duration?: number}) => <div className={styles.loaderContainer}>
+  {/* <ColorRing
     visible={true}
     height="80"
     width="80"
@@ -23,9 +26,11 @@ const Loader = ({ component }: {component?: JSX.Element}) => <div className={sty
     wrapperStyle={{}}
     wrapperClass="blocks-wrapper"
     colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
-    />
+    /> */}
+    
     <div>
-      {component}
+      <CountDownTimer duration={duration} />
+      <h3 style={{ marginTop: "30px" }}>{component}</h3>
     </div>
   </div>
 
@@ -36,10 +41,15 @@ export default function Home() {
   const [jobDescription, setJobDescription] = useState<string>()
   const [coverLetter, setCoverLetter] = useState<string>()
   const [step, setStep] = useState(1);
-  const [loaderContent, setLoaderContent] = useState<JSX.Element>()
+  const [loaderContent, setLoaderContent] = useState<JSX.Element>();
+  const [errorMessage, setErrorMessage] = useState<string>('')
+
+  useEffect(() => {
+    logEvent(analytics, "page_view")
+  }, [])
 
   const changeLoaderText = (text: string) => {
-    const textComponent = <>{text}<br/> It usually takes around 1 minute</>
+    const textComponent = <>{text}</>
     setLoaderContent(textComponent);
   }
 
@@ -67,27 +77,40 @@ export default function Home() {
 
     uploadBytes(storageRef, file).then(async (snapshot) => {
       changeLoaderText("Extracting information from your CV...");
-      const response = await parseCVtoJSON({ 
-        cvFilePath: `gs://${snapshot.metadata.bucket}/${snapshot.metadata.fullPath}`
-      });
 
-      const tokizedData = (response.data as { finalAItokens: string[] }).finalAItokens;
-      // @ts-ignore
-      let uniqueTokenizedData = [...new Set(tokizedData)];
+      try {
+        const response = await parseCVtoJSON({ 
+          cvFilePath: `gs://${snapshot.metadata.bucket}/${snapshot.metadata.fullPath}`
+        });
+  
+        const tokizedData = (response.data as { finalAItokens: string[] }).finalAItokens;
+        // @ts-ignore
+        let uniqueTokenizedData = [...new Set(tokizedData)];
+  
+        setExpTokens(uniqueTokenizedData)
+        setIsLoading(false);
+      } catch {
+        setIsLoading(false);
+        setErrorMessage("Something went wrong while trying to extract data from your CV. Contact the developer, please!")
+      }
 
-      setExpTokens(uniqueTokenizedData)
-      setIsLoading(false);
+      
     });
     
   }, [file])
 
   const generateCoverLetter = async () => {
-    const generateCoverLetterCallable = httpsCallable(functions, 'generateCoverLetter');
+    try {
+      const generateCoverLetterCallable = httpsCallable(functions, 'generateCoverLetter');
 
-    const result = await generateCoverLetterCallable({ expTokens, jobDescription });
-    console.log({ result });
+      const result = await generateCoverLetterCallable({ expTokens, jobDescription });
+      console.log({ result });
 
-    return (result.data as any).generatedCoverLetter;
+      return (result.data as any).generatedCoverLetter;
+    } catch {
+      setIsLoading(false);
+      setErrorMessage("Something went wrong while trying to generate the cover letter. Contact the developer, please!")
+    }
   }
 
   const reworkCoverLetter = async () => {
@@ -103,7 +126,7 @@ export default function Home() {
   const moveToCoverLetterStep = async () => {
     goToNextStep();
     setIsLoading(true);
-    changeLoaderText("Generating the cover later using the vacancy text and your data points...");
+    changeLoaderText("Generating the cover latter using the vacancy text and your data points...");
 
     const coverLetter = await generateCoverLetter()
 
@@ -128,8 +151,8 @@ export default function Home() {
     <main className={styles.main}>
       <h1 className={styles.pageTitle}>Cover Letter Generator</h1>
       <h3 className={styles.stepsCount}>Step: {step}/4</h3>
+      {errorMessage ? <div className={styles.description}><h1>{errorMessage}</h1></div> :
       <div className={styles.description}>
-          
         {!isLoading && step === 1 && 
           <>
             <span>
@@ -145,7 +168,7 @@ export default function Home() {
           <br/>
 
           {step === 2 && 
-          (isLoading ? <Loader component={loaderContent}/> :
+          (isLoading ? <Loader component={loaderContent} duration={50}/> :
           <>
             <h2>Here is a list of data points that were extracted from your CV. <br/> In the future versions, you&apos;ll be able to edit them</h2>
             <br />
@@ -172,7 +195,7 @@ export default function Home() {
           }
          
          {step === 4 && 
-         (isLoading ? <Loader component={loaderContent}/> :
+         (isLoading ? <Loader component={loaderContent} duration={55}/> :
           <>
             <h1>Generated Cover Letter</h1>
             <textarea style={{ height: '500px', width: '90%' }} value={coverLetter} onChange={handleCoverLetterChange}/>
@@ -182,7 +205,7 @@ export default function Home() {
             </div>
           </>)
          }
-      </div>
+      </div>}
     </main>
   );
 }

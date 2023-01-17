@@ -1,5 +1,6 @@
 import { initializeApp, getApp } from 'firebase/app';
 import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
+import { initializeAnalytics } from 'firebase/analytics';
 
 const clientCredentials = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -8,12 +9,11 @@ const clientCredentials = {
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 };
 
 
 export const firebaseApp = initializeApp(clientCredentials);
-
-console.log("ENV:", process.env.NODE_ENV);
 
 if (process.env.NODE_ENV ==='development') {
   const functions = getFunctions(getApp());

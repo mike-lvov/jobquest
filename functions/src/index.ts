@@ -142,7 +142,6 @@ export const generateCoverLetter = functions.runWith({ secrets: ["OPENAI_API_KEY
     top_p: 1,
     frequency_penalty: 0,
     presence_penalty: 0.6,
-    best_of: 2,
     stop: [" Human:", " AI:"],
     prompt:`The following is a conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly.
     Human: I'll provide you with a list of a person's achievements, experience, and skills. You should create the cover letter based on the vacancy information that I will also provice.
